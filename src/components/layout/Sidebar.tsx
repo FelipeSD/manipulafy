@@ -4,7 +4,7 @@ import { Logo } from "../commons/Logo";
 import { FaPlay, FaHeart } from "react-icons/fa";
 
 const Aside = styled.aside`
-    height: 100vh;
+    min-height: 100vh;
     width: 250px;
     background-color: #000000;
     transition: all 0.2s ease-in-out;
@@ -23,7 +23,6 @@ const NavLink = styled.nav`
     flex-direction: column;
     justify-content: center;
     padding: 1.5rem;
-    margin-top: auto;
     
     a { 
         display: flex;
@@ -55,11 +54,19 @@ const NavLink = styled.nav`
     }
 `;
 
+const Divider = styled.div`
+    height: 1px;
+    background-color: #222;
+    margin: 1rem 2rem;
+`;
+
 export function Sidebar() {
     return (
         <Aside>
             <Logo />
-
+            
+            <Divider />
+            
             <NavLink>
                 <Link href="/">
                     <a>

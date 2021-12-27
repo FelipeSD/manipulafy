@@ -1,7 +1,13 @@
 import styled from "styled-components"
-import { FiPlay } from "react-icons/fi"
+import { useState } from "react"
+import { FiPlay, FiPause } from "react-icons/fi"
 import { FaDeezer } from "react-icons/fa"
 import { MdFavorite, MdFavoriteBorder } from "react-icons/md"
+import { Track, usePreferences } from "../../hooks/usePreferences"
+
+interface PlaylistProps {
+    list: Track[]
+}
 
 const Table = styled.table`
     overflow: hidden;
@@ -64,7 +70,35 @@ const Flex = styled.div`
     }
 `
 
-export function Playlist() {
+export function Playlist({ list }: PlaylistProps) {
+    const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
+    const { addFavorite } = usePreferences();
+
+    function openDeezer(url: string) {
+        window.open(url, "_blank");
+    }
+
+    function playSound(url: string) {
+        if (audio) {
+            audio.pause();
+        }
+
+        const newAudio = new Audio(url);
+        newAudio.play();
+        setAudio(newAudio);
+    }
+
+    function stopSound() {
+        if (audio) {
+            audio.pause();
+            setAudio(null);
+        }
+    }
+
+    function favorite(track: Track) {
+        addFavorite(track);
+    }
+
     return (
         <Table>
             <thead>
@@ -72,35 +106,42 @@ export function Playlist() {
                     <th>Música</th>
                     <th>Artista</th>
                     <th>Álbum</th>
-                    <th>Duration</th>
+                    <th>Duração</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>
-                        <Flex>
-                            <img src="https://e-cdns-images.dzcdn.net/images/cover/44c144f53d3c4e3ca5e8c6b9ee13ed27/56x56-000000-80-0-0.jpg" />
-                            <span>Song 1</span>
-                        </Flex>
-                    </td>
-                    <td>Artist 1</td>
-                    <td>Album 1</td>
-                    <td>3:00</td>
-                    <td>
-                        <Flex className="mx-auto">
-                            <RoundButton type="button">
-                                <FaDeezer />
-                            </RoundButton>
-                            <RoundButton type="button">
-                                <FiPlay />
-                            </RoundButton>
-                            <RoundButton type="button">
-                                <MdFavoriteBorder />
-                            </RoundButton>
-                        </Flex>
-                    </td>
-                </tr>
+                {list.map(track => (
+                    <tr key={track.id}>
+                        <td>
+                            <Flex>
+                                <img src={track.album.cover_small} />
+                                <span>{track.title}</span>
+                            </Flex>
+                        </td>
+                        <td>{track.artist.name}</td>
+                        <td>{track.album.title}</td>
+                        <td>{track.duration}</td>
+                        <td>
+                            <Flex className="mx-auto">
+                                <RoundButton type="button" onClick={() => openDeezer(track.link)}>
+                                    <FaDeezer />
+                                </RoundButton>
+                                {audio && audio.src === track.preview 
+                                    ? <RoundButton type="button" onClick={() => stopSound()}>
+                                        <FiPause />
+                                    </RoundButton>
+                                    : <RoundButton type="button" onClick={() => playSound(track.preview)}>
+                                        <FiPlay />
+                                    </RoundButton>
+                                }
+                                <RoundButton type="button" onClick={() => favorite(track)}>
+                                    <MdFavoriteBorder />
+                                </RoundButton>
+                            </Flex>
+                        </td>
+                    </tr>
+                ))}
             </tbody>
         </Table>
     )

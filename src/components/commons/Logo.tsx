@@ -1,4 +1,6 @@
+import Image from "next/image";
 import styled from "styled-components"
+import logo from "../../assets/images/logo.png"
 
 const Container = styled.div`
     display: flex;
@@ -11,16 +13,9 @@ const Container = styled.div`
         margin-top: .5rem
     }
 
-    img {
-        width: 70px;
-    }
-
     @media (max-width: 600px) {
         padding-top: .5rem;
 
-        img {
-            width: 40px;
-        }
 
         h3 {
             display: none;
@@ -31,7 +26,7 @@ const Container = styled.div`
 export function Logo(){
     return (
         <Container>
-            <img src="/images/logo.png" alt="Manipulafy" />
+            <Image src={logo} width={70} height={70} alt="Manipulafy" />
             <h3>Manipulafy</h3>
         </Container>
     )

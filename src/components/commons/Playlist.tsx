@@ -4,6 +4,7 @@ import { FiPlay, FiPause } from "react-icons/fi"
 import { FaDeezer } from "react-icons/fa"
 import { MdFavorite, MdFavoriteBorder } from "react-icons/md"
 import { Track, usePreferences } from "../../hooks/usePreferences"
+import Image from "next/image"
 
 interface PlaylistProps {
     list: Track[]
@@ -33,6 +34,14 @@ const Table = styled.table`
 
         td {
             padding: .5rem;
+        }
+    }
+
+    @media (max-width: 600px) {
+        tr > :nth-child(2),
+        tr > :nth-child(3),
+        tr > :nth-child(4) {
+            display: none;
         }
     }
 `
@@ -67,6 +76,14 @@ const Flex = styled.div`
 
     &.mx-auto {
         justify-content: center;
+    }
+
+    @media (max-width: 600px) {
+        flex-direction: column;
+
+        & > * {
+            margin-top: .5rem;
+        }
     }
 `
 
@@ -119,7 +136,11 @@ export function Playlist({ list }: PlaylistProps) {
                     <tr key={track.id}>
                         <td>
                             <Flex>
-                                <img src={track.album.cover_small} />
+                                <Image
+                                    src={track.album.cover_small}
+                                    width={60} 
+                                    height={60} 
+                                    alt="cover" />
                                 <span>{track.title}</span>
                             </Flex>
                         </td>
@@ -131,7 +152,7 @@ export function Playlist({ list }: PlaylistProps) {
                                 <RoundButton type="button" onClick={() => openDeezer(track.link)}>
                                     <FaDeezer />
                                 </RoundButton>
-                                {audio && audio.src === track.preview 
+                                {audio && audio.src === track.preview
                                     ? <RoundButton type="button" onClick={() => stopSound()}>
                                         <FiPause />
                                     </RoundButton>
@@ -140,7 +161,7 @@ export function Playlist({ list }: PlaylistProps) {
                                     </RoundButton>
                                 }
 
-                                {favorites[track.id] 
+                                {favorites[track.id]
                                     ? <RoundButton type="button" onClick={() => unfavorite(track)}>
                                         <MdFavorite />
                                     </RoundButton>

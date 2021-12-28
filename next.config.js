@@ -6,6 +6,16 @@ module.exports = withPWA({
     dest: "public",
     register: true,
     skipWaiting: true,
-    runtimeCaching
+    runtimeCaching,
+    disable: process.env.NODE_ENV === 'development',
+  },
+  images: {
+    domains: [
+      'e-cdns-images.dzcdn.net',
+      'http://localhost:3000/',
+      'https://manipulafy.vercel.app',
+      'https://manipulafy-git-master-felipesd.vercel.app',
+      'https://manipulafy-felipesd.vercel.app'
+    ]
   }
 });

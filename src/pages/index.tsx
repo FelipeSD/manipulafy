@@ -29,7 +29,7 @@ export default function Home({ tracks }: HomeProps) {
     );
 
     setTrackList(filteredTracks);
-  }, [searchData]);
+  }, [searchData, trackList, tracks]);
 
   return (
     <Scaffold title="Mais tocadas">

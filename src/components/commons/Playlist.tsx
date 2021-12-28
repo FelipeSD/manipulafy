@@ -72,7 +72,7 @@ const Flex = styled.div`
 
 export function Playlist({ list }: PlaylistProps) {
     const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
-    const { addFavorite } = usePreferences();
+    const { favorites, addFavorite, removeFavorite } = usePreferences();
 
     function openDeezer(url: string) {
         window.open(url, "_blank");
@@ -97,6 +97,10 @@ export function Playlist({ list }: PlaylistProps) {
 
     function favorite(track: Track) {
         addFavorite(track);
+    }
+
+    function unfavorite(track: Track) {
+        removeFavorite(track);
     }
 
     return (
@@ -135,9 +139,15 @@ export function Playlist({ list }: PlaylistProps) {
                                         <FiPlay />
                                     </RoundButton>
                                 }
-                                <RoundButton type="button" onClick={() => favorite(track)}>
-                                    <MdFavoriteBorder />
-                                </RoundButton>
+
+                                {favorites[track.id] 
+                                    ? <RoundButton type="button" onClick={() => unfavorite(track)}>
+                                        <MdFavorite />
+                                    </RoundButton>
+                                    : <RoundButton type="button" onClick={() => favorite(track)}>
+                                        <MdFavoriteBorder />
+                                    </RoundButton>
+                                }
                             </Flex>
                         </td>
                     </tr>

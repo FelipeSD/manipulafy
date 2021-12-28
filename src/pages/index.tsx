@@ -1,4 +1,5 @@
 import { GetStaticPropsResult } from "next";
+import { useEffect, useState } from "react";
 import { Playlist } from "../components/commons/Playlist";
 import { Scaffold } from "../components/layout/Scaffold";
 import { SearchBox } from "../components/layout/SearchBox";
@@ -10,12 +11,30 @@ interface HomeProps {
   tracks: Track[];
 }
 
-export default function Home({tracks}: HomeProps) {
-  
+export default function Home({ tracks }: HomeProps) {
+  const [trackList, setTrackList] = useState<Track[]>(tracks);
+  const [searchData, setSearchData] = useState<string>("");
+
+  useEffect(() => {
+    if(!searchData){
+      setTrackList(tracks);
+      return;
+    }
+    
+    const filteredTracks = trackList.filter(
+      (track: Track) =>
+        track.title.toLowerCase().includes(searchData.toLowerCase())
+        || track.artist.name.toLowerCase().includes(searchData.toLowerCase())
+        || track.album.title.toLowerCase().includes(searchData.toLowerCase())
+    );
+
+    setTrackList(filteredTracks);
+  }, [searchData]);
+
   return (
     <Scaffold title="Mais tocadas">
-      <SearchBox />
-      <Playlist list={tracks} />
+      <SearchBox onSearch={setSearchData} />
+      <Playlist list={trackList} />
     </Scaffold>
   )
 }

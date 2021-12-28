@@ -20,7 +20,9 @@ type PreferencesProviderProps = {
 }
 
 type PreferencesContextData = {
-    favorites: Track[];
+    favorites: {
+        [key: number]: Track;
+    };
     addFavorite: (track: Track) => void;
     removeFavorite: (track: Track) => void;
 }
@@ -31,14 +33,21 @@ export function PreferencesProvider({ children }: PreferencesProviderProps) {
     const [favorites, setFavorites] = useState<Track[]>([]);
 
     async function addFavorite(track: Track) {
-        setFavorites([...favorites, track]);
-        localStorage.setItem("favorites", JSON.stringify([...favorites, track]));
+        const newFavorites = {
+            ...favorites,
+            [track.id]: track
+        }
+        setFavorites(newFavorites);
+        localStorage.setItem("favorites", JSON.stringify(newFavorites));
     }
 
     async function removeFavorite(track: Track) {
-        const favoritesWithoutTrack = favorites.filter(favorite => favorite.id !== track.id);
-        setFavorites(favoritesWithoutTrack);
-        localStorage.setItem("favorites", JSON.stringify(favoritesWithoutTrack));
+        const newFavorites = {
+            ...favorites
+        }
+        delete newFavorites[track.id];
+        setFavorites(newFavorites);
+        localStorage.setItem("favorites", JSON.stringify(newFavorites));
     }
 
     useEffect(() => {

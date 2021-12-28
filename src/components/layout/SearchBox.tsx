@@ -21,10 +21,14 @@ const Input = styled.input`
     }
 `;
 
-export function SearchBox() {
+type SearchBoxProps = {
+    onSearch: (value: string) => void;
+}
+
+export function SearchBox({onSearch}: SearchBoxProps) {
     return (
         <Container>
-            <Input placeholder="Pesquisar"/>
+            <Input placeholder="Pesquisar" onChange={(e)=> onSearch(e.target.value)}/>
         </Container>
     )
 }

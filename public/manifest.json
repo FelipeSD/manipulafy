@@ -37,6 +37,8 @@
     "theme_color": "#000000",
     "background_color": "#121212",
     "start_url": "/",
+    "scope": "/",
     "display": "standalone",
+    "description": "Músicas mais tocadas com Deezer",
     "orientation": "portrait"
 }

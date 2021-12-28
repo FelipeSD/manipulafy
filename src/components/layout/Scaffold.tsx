@@ -22,6 +22,7 @@ export function Scaffold({children, title}: ScaffoldProps) {
         <>
             <Head>
                 <title>{title} | Manipulafy</title>
+                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
             </Head>
             <Flex>
                 <Sidebar />
